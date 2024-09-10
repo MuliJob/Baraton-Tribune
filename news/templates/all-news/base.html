@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+
+  {% if title %}
+  <title>Baraton Tribune - {{title}}</title>
+  {% else %}
+    <title> Baraton Tribune </title>
+  {% endif %}
+
+</head>
+<body>
+    {% block content %} <h1>News for {{date|date:"l d-F Y"}}</h1> {%endblock%}
+</body>
+</html>
