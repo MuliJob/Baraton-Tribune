@@ -1,5 +1,5 @@
-from django.utils import timezone
-from django.test import TestCase, tag
+import datetime as dt
+from django.test import TestCase
 from .models import Editor,Article,tags
 
 class EditorTestClass(TestCase):
@@ -19,65 +19,36 @@ class EditorTestClass(TestCase):
         self.assertTrue(len(editors) > 0)
         
 
-class ArticleModelTest(TestCase):
+class ArticleTestClass(TestCase):
+
     def setUp(self):
-        self.editor = Editor.objects.create(first_name = 'Test', last_name ='Editor', email ='testeditor@moringaschool.com')
-        self.tag1 = tags.objects.create(name="Tag1")
-        self.tag2 = tags.objects.create(name="Tag2")
-        self.article = Article.objects.create(
-            title="Test Article",
-            post="This is a test article.",
-            editor=self.editor,
-        )
-        self.article.tags.add(self.tag1, self.tag2)
+        # Creating a new editor and saving it
+        self.james= Editor(first_name = 'James', last_name ='Muriuki', email ='james@moringaschool.com')
+        self.james.save_editor()
 
-    def test_create_article(self):
-        self.assertEqual(Article.objects.count(), 1)
-        self.assertEqual(self.article.title, "Test Article")
-        self.assertEqual(self.article.post, "This is a test article.")
-        self.assertEqual(self.article.editor, self.editor)
-        self.assertEqual(self.article.tags.count(), 2)
-    
-    def test_delete_article(self):
-        article_id = self.article.id
-        self.article.delete()
-        self.assertEqual(Article.objects.count(), 0)
-        with self.assertRaises(Article.DoesNotExist):
-            Article.objects.get(id=article_id)
-    
-    def test_display_all_articles(self):
-        Article.objects.create(
-            title="Second Article",
-            post="This is another test article.",
-            editor=self.editor,
-        )
-        articles = Article.objects.all()
-        self.assertEqual(articles.count(), 2)
-        self.assertIn(self.article, articles)
+        # Creating a new tag and saving it
+        self.new_tag = tags(name = 'testing')
+        self.new_tag.save()
 
-    def test_update_article(self):
-        new_title = "Updated Test Article"
-        new_post = "This is an updated test article."
-        new_editor = Editor.objects.create(first_name = 'New', last_name ='Editor', email ='neweditor@moringaschool.com')
-        new_tag = tags.objects.create(name="NewTag")
+        self.new_article= Article(title = 'Test Article',post = 'This is a random test Post',editor = self.james)
+        self.new_article.save()
 
-        self.article.title = new_title
-        self.article.post = new_post
-        self.article.editor = new_editor
-        self.article.tags.add(new_tag)
-        self.article.save()
+        self.new_article.tags.add(self.new_tag)
 
-        updated_article = Article.objects.get(id=self.article.id)
-        self.assertEqual(updated_article.title, new_title)
-        self.assertEqual(updated_article.post, new_post)
-        self.assertEqual(updated_article.editor, new_editor)
-        self.assertEqual(updated_article.tags.count(), 3)
-        self.assertIn(new_tag, updated_article.tags.all())
+    def tearDown(self):
+        Editor.objects.all().delete()
+        tags.objects.all().delete()
+        Article.objects.all().delete()
 
-    def test_article_pub_date(self):
-        self.assertIsNotNone(self.article.pub_date)
-        self.assertTrue(isinstance(self.article.pub_date, timezone.datetime))
-        self.assertLess(self.article.pub_date, timezone.now())
+    def test_get_news_today(self):
+        today_news = Article.todays_news()
+        self.assertTrue(len(today_news)>0)
+
+    def test_get_news_by_date(self):
+        test_date = '2024-03-17'
+        date = dt.datetime.strptime(test_date, '%Y-%m-%d').date()
+        news_by_date = Article.days_news(date)
+        self.assertTrue(len(news_by_date) == 0)
 
 class TagsModelTest(TestCase):
     def setUp(self):
