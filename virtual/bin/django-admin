@@ -1,4 +1,4 @@
-#!/home/muli/Desktop/Projects/The-Baraton-Tribune/virtual/bin/python
+#!/home/muli/Desktop/Projects/The-Baraton-Tribune/virtual/bin/python3
 # -*- coding: utf-8 -*-
 import re
 import sys
