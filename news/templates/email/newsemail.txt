@@ -1,0 +1,3 @@
+Hello {{name}}
+
+Welcome to the Baraton tribune newsletter You will find the most exciting news about Baraton School
