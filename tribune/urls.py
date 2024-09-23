@@ -7,6 +7,6 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('',include('news.urls')),
     path('accounts/',include('registration.backends.simple.urls')),
-    path(r'^tinymce/', include('tinymce.urls')),
+    path(r'tinymce/', include('tinymce.urls')),
     path('logout/', LogoutView.as_view(next_page='/'), name='logout'),
 ]
