@@ -1,5 +1,5 @@
 from django.shortcuts import render,redirect
-from django.http import HttpResponse, Http404, HttpResponseRedirect
+from django.http import Http404, JsonResponse
 import datetime as dt
 from .models import Article, NewsLetterRecipients
 from .forms import NewsLetterForm, NewArticleForm
@@ -10,22 +10,18 @@ from django.contrib.auth.decorators import login_required
 def news_today(request):
     date = dt.date.today()
     news = Article.todays_news()
-    
-    if request.method == 'POST':
-        form = NewsLetterForm(request.POST)
-        if form.is_valid():
-            name = form.cleaned_data['your_name']
-            email = form.cleaned_data['email']
+    form = NewsLetterForm()
+    return render(request, 'all-news/today-news.html', {"date": date, "news": news, "letterForm": form})
 
-            recipient = NewsLetterRecipients(name = name,email =email)
-            recipient.save()
-            send_welcome_email(name,email)
+def newsletter(request):
+    name = request.POST.get('your_name')
+    email = request.POST.get('email')
 
-            HttpResponseRedirect('news_today')
-    else:
-        form = NewsLetterForm()
-
-    return render(request, 'all-news/today-news.html', {"date": date,"news":news,"letterForm":form})
+    recipient = NewsLetterRecipients(name=name, email=email)
+    recipient.save()
+    send_welcome_email(name, email)
+    data = {'success': 'You have been successfully added to mailing list'}
+    return JsonResponse(data)
 
 def past_days_news(request, past_date):
     try:
