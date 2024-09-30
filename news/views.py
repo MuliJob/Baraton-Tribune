@@ -6,7 +6,6 @@ from .forms import NewsLetterForm, NewArticleForm
 from .email import send_welcome_email
 from django.contrib.auth.decorators import login_required
 
-# Create your views here.
 def news_today(request):
     date = dt.date.today()
     news = Article.todays_news()
@@ -25,10 +24,8 @@ def newsletter(request):
 
 def past_days_news(request, past_date):
     try:
-        # Converts data from the string Url
         date = dt.datetime.strptime(past_date, '%Y-%m-%d').date()
     except ValueError:
-        # Raise 404 error when ValueError is thrown
         raise Http404()
         assert False
 

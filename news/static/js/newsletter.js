@@ -11,9 +11,9 @@ $(document).ready(function(){
       'success': function(data){
         alert(data['success'])
       },
-    })// END of Ajax method
+    })
     $('#id_your_name').val('')
     $("#id_email").val('')
-  }) // End of submit event
+  }) 
 
-}) // End of document ready function
+})
