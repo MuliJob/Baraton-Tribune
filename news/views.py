@@ -7,12 +7,13 @@ from .email import send_welcome_email
 from django.contrib.auth.decorators import login_required
 from rest_framework.response import Response
 from rest_framework.views import APIView
-from .models import  MoringaMerch
+from .models import  BaratonMerch
 from .serializer import MerchSerializer
+from rest_framework import status
 
 class MerchList(APIView):
     def get(self, request, format=None):
-        all_merch = MoringaMerch.objects.all()
+        all_merch = BaratonMerch.objects.all()
         serializers = MerchSerializer(all_merch, many=True)
         return Response(serializers.data)
 
@@ -37,7 +38,6 @@ def past_days_news(request, past_date):
         date = dt.datetime.strptime(past_date, '%Y-%m-%d').date()
     except ValueError:
         raise Http404()
-        assert False
 
     if date == dt.date.today():
         return redirect(news_today)
