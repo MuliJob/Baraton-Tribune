@@ -25,6 +25,19 @@ class MerchList(APIView):
         return Response(serializers.errors, status=status.HTTP_400_BAD_REQUEST)
     permission_classes = (IsAdminOrReadOnly,)
 
+class MerchDescription(APIView):
+    permission_classes = (IsAdminOrReadOnly,)
+    def get_merch(self, pk):
+        try:
+            return BaratonMerch.objects.get(pk=pk)
+        except BaratonMerch.DoesNotExist:
+            return Http404
+
+    def get(self, request, pk, format=None):
+        merch = self.get_merch(pk)
+        serializers = MerchSerializer(merch)
+        return Response(serializers.data)
+
 def news_today(request):
     date = dt.date.today()
     news = Article.todays_news()

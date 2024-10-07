@@ -4,4 +4,4 @@ from .models import BaratonMerch
 class MerchSerializer(serializers.ModelSerializer):
     class Meta:
         model = BaratonMerch
-        fields = ('name', 'description', 'price')
+        fields = ('id', 'name', 'description', 'price')

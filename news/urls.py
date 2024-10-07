@@ -1,4 +1,4 @@
-from django.urls import path
+from django.urls import path, re_path
 from . import views
 from django.conf import settings
 from django.conf.urls.static import static
@@ -10,7 +10,8 @@ urlpatterns=[
     path(r'search/', views.search_results,name = 'search_results'),
     path(r'new/article', views.new_article, name='new-article'),
     path(r'ajax/newsletter/', views.newsletter, name='newsletter'),
-    path(r'api/merch/', views.MerchList.as_view(), name='mech-list')
+    path(r'api/merch/', views.MerchList.as_view(), name='mech-list'),
+    re_path(r'api/merch/merch-id/(?P<pk>[0-9]+)/$', views.MerchDescription.as_view())
 ]
 
 if settings.DEBUG:
