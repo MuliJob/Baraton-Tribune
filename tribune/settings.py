@@ -37,6 +37,7 @@ INSTALLED_APPS = [
     'bootstrap3',
     'registration',
     'rest_framework',
+    'rest_framework.authtoken',
     'tinymce',
     'django.contrib.admin',
     'django.contrib.auth',
@@ -45,6 +46,12 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
 ]
+
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework.authentication.TokenAuthentication',
+    )
+}
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
